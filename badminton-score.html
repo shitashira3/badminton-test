@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ตารางคำนวณลูกแบดมินตัน</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 6px;
+      text-align: center;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 6px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    h2 {
+      color: #333;
+      margin-top: 40px;
+    }
+    .sum-cell {
+      font-weight: bold;
+      color: darkblue;
+    }
+    .efficiency-pass {
+      color: green;
+      font-weight: bold;
+    }
+    .efficiency-mid {
+      color: orange;
+      font-weight: bold;
+    }
+    .efficiency-fail {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>🏸 ตารางคำนวณจำนวนลูกแบดมินตันที่ตีได้</h2>
+  <p>ป้อนชื่อและจำนวนลูกที่ได้ในแต่ละรอบ เช่น <code>1+2+3+4+5</code> ระบบจะคำนวณผลรวม และประเมินประสิทธิภาพให้อัตโนมัติ</p>
+  <table>
+    <thead>
+      <tr>
+        <th>ชื่อนักกีฬา</th>
+        <th>จำนวนลูกที่ได้</th>
+        <th>จำนวนรวม</th>
+        <th>ประสิทธิภาพ</th>
+      </tr>
+    </thead>
+    <tbody id="table-body-1">
+      <!-- แถวจะถูกสร้างโดย JavaScript -->
+    </tbody>
+  </table>
+
+  <!-- ตารางสรุปผลแต่ละครั้ง -->
+  <h2>📋 สรุปผลแต่ละครั้ง</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>ชื่อนักกีฬา</th>
+        <!-- สร้างหัวตาราง 1 ถึง 10 -->
+        <script>
+          document.write([...Array(10)].map((_, i) => `<th>${i + 1}</th>`).join(""));
+        </script>
+      </tr>
+    </thead>
+    <tbody id="table-body-2">
+      <!-- แถวจะถูกสร้างโดย JavaScript -->
+    </tbody>
+  </table>
+
+  <script>
+    const tableBody1 = document.getElementById("table-body-1");
+    const tableBody2 = document.getElementById("table-body-2");
+
+    function createFirstTableRow() {
+      const row = document.createElement("tr");
+
+      const nameCol = document.createElement("td");
+      const nameInput = document.createElement("input");
+      nameInput.type = "text";
+      nameInput.placeholder = "ชื่อนักกีฬา";
+      nameCol.appendChild(nameInput);
+      row.appendChild(nameCol);
+
+      const inputCol = document.createElement("td");
+      const inputBox = document.createElement("input");
+      inputBox.type = "text";
+      inputBox.placeholder = "1+2+3+4+5";
+      inputCol.appendChild(inputBox);
+      row.appendChild(inputCol);
+
+      const sumCol = document.createElement("td");
+      sumCol.className = "sum-cell";
+      sumCol.textContent = "";
+
+      const effCol = document.createElement("td");
+      effCol.className = "";
+
+      row.appendChild(sumCol);
+      row.appendChild(effCol);
+
+      inputBox.addEventListener("input", () => {
+        let sum;
+        try {
+          sum = eval(inputBox.value);
+          sumCol.textContent = isNaN(sum) ? "❌" : sum;
+
+          if (isNaN(sum)) {
+            effCol.textContent = "";
+            effCol.className = "";
+          } else if (sum >= 50) {
+            effCol.textContent = "✅ ผ่าน";
+            effCol.className = "efficiency-pass";
+          } else if (sum >= 30) {
+            effCol.textContent = "⚠️ ผ่าน 50%";
+            effCol.className = "efficiency-mid";
+          } else {
+            effCol.textContent = "❌ ไม่ผ่าน";
+            effCol.className = "efficiency-fail";
+          }
+        } catch {
+          sumCol.textContent = "❌";
+          effCol.textContent = "";
+          effCol.className = "";
+        }
+      });
+
+      tableBody1.appendChild(row);
+    }
+
+    function createSummaryRow() {
+      const row = document.createElement("tr");
+
+      const nameCol = document.createElement("td");
+      const nameInput = document.createElement("input");
+      nameInput.type = "text";
+      nameInput.placeholder = "ชื่อนักกีฬา";
+      nameCol.appendChild(nameInput);
+      row.appendChild(nameCol);
+
+      for (let i = 0; i < 10; i++) {
+        const cell = document.createElement("td");
+        const input = document.createElement("input");
+        input.type = "text";
+        input.placeholder = "-";
+        cell.appendChild(input);
+        row.appendChild(cell);
+      }
+
+      tableBody2.appendChild(row);
+    }
+
+    for (let i = 0; i < 10; i++) {
+      createFirstTableRow();
+      createSummaryRow();
+    }
+  </script>
+</body>
+</html>
